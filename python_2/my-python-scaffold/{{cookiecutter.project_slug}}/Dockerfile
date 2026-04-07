@@ -1,16 +1,17 @@
-# Use a slim version of Python to keep the image small
 FROM python:3.11-slim
+
+# Metadata injection for the Platform Engineering catalog
+LABEL maintainer="{{ cookiecutter.author_name }}"
+LABEL service="{{ cookiecutter.project_slug }}"
 
 WORKDIR /app
 
-# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application
-COPY app.py .
+COPY . .
 
-# Inform the platform which port the app listens on
-EXPOSE 8080
+# Match the port defined in the scaffold configuration
+EXPOSE {{ cookiecutter.app_port }}
 
 CMD ["python", "app.py"]
